@@ -27,9 +27,5 @@ COPY . .
 
 CMD python3 main.py
 
-# In regards to volume -> to save the model files in container's directory:
-# docker run -it -v /Users/karenw/desktop/automation_training/generatedModel:/automation_training/generatedModel bani_training
-#to remove vol: docker rm -v
-
 
 
