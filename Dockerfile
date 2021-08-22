@@ -15,6 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 RUN yes | pip install \
     wheel \
     uwsgi \
+    flask \
     nltk==3.5 \
     Bani==0.7.2 \
     nlpaug==1.1.3 &&\
@@ -26,6 +27,7 @@ RUN python -m spacy download en_core_web_sm
 COPY . .
 
 CMD python3 main.py
+
 
 
 
