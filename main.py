@@ -18,9 +18,9 @@ from Bani.generation.sentAug.sentAug import AUG
 
 class automation_training:
     def __init__(self):
-        self.FAQSTORE_PATH = "./faqStore"
+        self.FAQ_PATH = "/faq_store"
         self.CSV_PATH = "./csv_folder/"
-        self.MODEL_PATH = "./generatedModel"
+        self.MODEL_PATH = "/model"
 
         self.faq_list = []  # to capture and store the name of FAQ
         self.generatorManager = self.generator_manager()
@@ -30,13 +30,12 @@ class automation_training:
             for file_name in os.listdir(self.CSV_PATH):
                 if file_name.endswith(".csv"):
                     faq_name = file_name.partition('.')[0]
+                    self.faq_list.append(faq_name)
                     file_path = self.CSV_PATH+file_name
                     self.create_faq_from_csv(file_path, faq_name)
-                    self.faq_list.append(faq_name)
                     
             loaded_faq_list = self.load_faq()
             bot = self.train_model(loaded_faq_list)
-            self.test_trained_model(bot)
 
         except Exception as e:
             print("Exception: %s" % e)
@@ -65,14 +64,14 @@ class automation_training:
         faq_name = FAQ(
             name=faq_name, questions=questions, answers=answers)
         faq_name.buildFAQ(self.generatorManager)
-        faq_name.save(self.FAQSTORE_PATH)  # save as .pkl
+        faq_name.save(self.FAQ_PATH)
         print(f"{faq_name} created")
 
     def load_faq(self):
         loaded_faq_list = []  # contains a list of loaded FAQs
         for i in self.faq_list:
             faq_name = FAQ(name=i)
-            faq_name.load(self.FAQSTORE_PATH)
+            faq_name.load(self.FAQ_PATH)
             loaded_faq_list.append(faq_name)
             print("FAQ %s loaded! " % i)
         print(f"All FAQs loaded - {self.faq_list}")
@@ -99,7 +98,7 @@ class automation_training:
     def test_trained_model(self, bot):
         # read file from csv - append it as original and reframed questions - use bot.test
         print("--- Testing Model ---")
-        df = pd.read_csv("CovidFAQs_test_questions(18).csv")
+        df = pd.read_csv(self.CSV_PATH+"Covid19.csv")
         testData = []
 
         for i in range(len(df)):
@@ -112,7 +111,7 @@ class automation_training:
             print(f"Accuracy using Bani's test method for faq {e}: {acc}")
 
         print("------")
-        qn = "What is the prevailing permissible group size for social activities?"
+        qn = "Is my family allowed to travel in the same taxi or private hire car"
         ans = bot.findClosest(qn)
 
         for i in range(len(self.faq_list)):
@@ -122,4 +121,3 @@ class automation_training:
 if __name__ == "__main__":
     main = automation_training()
     main.start_training()
-    
