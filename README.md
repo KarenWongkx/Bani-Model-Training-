@@ -1,6 +1,6 @@
 # Building Question Answer Agent – Bani Bot (1)
 
-## Bani's Model Training
+**Bani's Model Training**</br>
 
 ## Description
 
@@ -31,6 +31,8 @@ docker run -v $(pwd):/bani_training -it --mount source=model_vol_name,target=/mo
 - Each FAQ file contains question and answer for 1 topic. </br>
 - The first column is the question, second column is the answer. Question and answer data begins on the first line (no header).</br>
 - File should be available in a CSV format. </br>
-  **Volume:** </br>
+
+**Volume:**</br>
+
 - Subsequent training of FAQ classes with the same file name will overwrite the FAQ files in the faq_store volume. </br>
 - If subsequent training does not support a topic that was trained previously, do remove the files in the volume, in case there may be issue with loading of bot for answering. </br>
